@@ -44,6 +44,7 @@ interface RideParser
      * Returned array format:
      *   array['from'] - place 'from' ride is offered; start point
      *   array['to'] - place 'to' ride is offered; end point
+     *   array['through'] - array (optional); in case ride offering 'through' points
      * </p>
      * 
      * @param string $post

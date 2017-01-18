@@ -10,7 +10,7 @@ use Exception;
  * @package Tooday\Parser
  * @author Ivo Hradek <ivohradek@gmail.com>
  */
-class RideParserImpl
+class RideParserImpl implements RideParser
 {
     // *** 'Where' parsing
     /**
@@ -135,6 +135,12 @@ class RideParserImpl
         return $this->containsOneOf($string, self::OFFERS);
     }
 
+    // *** 'free-seats' parsing
+    public function freeSeats($post)
+    {
+        // TODO: Implement freeSeats() method.
+    }
+
     // *** 'is-request' filtering
     /**
      * List of 'requests' words.
@@ -150,7 +156,7 @@ class RideParserImpl
     {
         return $this->containsOneOf($string, self::REQUESTS);
     }
-
+    
     // *** Helper functions
     private function containsOneOf($string, array $words)
     {

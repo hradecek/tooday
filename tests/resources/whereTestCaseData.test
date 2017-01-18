@@ -1,60 +1,84 @@
 #
 # Arrow styles
 #
-Lorem ipsum CityOne -> CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom -> CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne - CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom - CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne => CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom => CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne ~> CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom ~> CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne --> CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom --> CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne > CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom > CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne >> CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom >> CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne >   CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom >   CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne    ~> CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom    ~> CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum    CityOne -> CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum    CityFrom -> CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum CityOne - CityTwo     dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom - CityTo     dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
 Lorem ipsum
-    CityOne - CityTwo
+    CityFrom - CityTo
       dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
 Lorem
-    ipsum CityOne -> CityTwo
+    ipsum CityFrom -> CityTo
 dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
 #
-# From-To styles
+# Arrow styles with through
 #
-Lorem ipsum z CityOne do CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom -> CityThroughOne -> CityThroughTwo -> CityTo dolor sit amet,
+consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
-Lorem ipsum    z CityOne    do CityTwo dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum CityFrom - CityThroughOne - CityThroughTwo - CityTo
+ dolor sit amet, consectetur adipiscing elit.
+Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
+
+Lorem ipsum CityFrom => CityThroughOne
+  ~> CityThroughTwo >> CityTo dolor sit amet,
+      consectetur adipiscing elit.
+Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
+
+Lorem ipsum CityFrom ~> CityThroughOne - CityThroughTwo --> CityTo dolor sit amet, consectetur adipiscing elit.
+Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
+
+Lorem ipsum CityFrom -->
+  CityThroughOne > CityThroughTwo => CityTo
+  dolor sit amet, consectetur adipiscing elit.
+      Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
+
+#
+# From-To styles
+#
+Lorem ipsum z CityFrom do CityTo dolor sit amet, consectetur adipiscing elit.
+Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
+
+Lorem ipsum    z CityFrom    do CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 
 Lorem ipsum z
-  CityOne do
-CityTwo dolor sit amet, consectetur adipiscing elit.
+  CityFrom do
+CityTo dolor sit amet, consectetur adipiscing elit.
 Morbi libero nunc, consequat vel iaculis ut, dapibus in arcu. Quisque euismod.
 

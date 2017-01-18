@@ -14,8 +14,9 @@ class RideParserTestCase extends TestCase
      * Default sample cities used in test data.
      */
     const TEST_CITIES = [
-        'from' => 'CityOne',
-        'to'   => 'CityTwo'
+        'from'    => 'CityFrom',
+        'through' => ['CityThroughOne', 'CityThroughTwo'],
+        'to'      => 'CityTo'
     ];
     
     /**
@@ -102,8 +103,16 @@ class RideParserTestCase extends TestCase
     {
         $this->assertArrayHasKey('from', $actual, "<from> should be parsed for:\n$post");
         $this->assertArrayHasKey('to', $actual, "<to> should be parsed for:\n$post");
-        $this->assertEquals($expected['from'], $actual['from'], "<from> was should be same for:\n$post");
-        $this->assertEquals($expected['to'], $actual['to'], "<to> was should be same for:\n$post");
+        // $this->assertArrayHasKey('through', $actual, "<through> should be parsed for:\n$post");
+        
+        $this->assertEquals($expected['from'], $actual['from'], "<from> should be same for:\n$post");
+        $this->assertEquals($expected['to'], $actual['to'], "<to> should be same for:\n$post");
+        
+        //if (!empty($actual['through'])) {
+        if (array_key_exists('through', $actual)) {
+            $this->assertEquals($expected['through'][0], $actual['through'][0], "<through> should be same for:\n$post");
+            $this->assertEquals($expected['through'][1], $actual['through'][1], "<through> should be same for:\n$post");
+        }
     }
 }
 

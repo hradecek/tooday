@@ -18,12 +18,13 @@ class RideParserImpl implements RideParser
      * Parsing all kinds of 'arrow' style:
      *   Ex. ... City1 ~> City2 ...
      *       ... City1 - City2 ...
-     *
-     * Matching vars:
-     *   - <from>
-     *   - <to>
+     * 
+     * Note: In WHERE_ARROWS if one arrow is sub-arrow of another
+     *       it must be listed before to match first.
+     *       (ex. -->|-> or >>>|>>|>)
      */
-    const WHERE_REGEX_ARROWS = '/(?<from>\w+)\s*((->|-|=>|~>|-->|>|>>){1}\s*(?<to>\w+))/';
+    const WHERE_ARROWS = '(?:-->|->|-|=>|~>|>>>|>>|>)';
+    const WHERE_REGEX_ARROWS = '/((\w+)\s*' . self::WHERE_ARROWS . '{1}\s*)+(\w+)/';
 
     /**
      * Regular expression for place parsing.
@@ -34,11 +35,28 @@ class RideParserImpl implements RideParser
 
     public function where($post)
     {
-        $where = [];
+        $match = [];
         
-        preg_match(self::WHERE_REGEX_ARROWS, $post, $where) || 
-        preg_match(self::WHERE_REGEX_FROM_TO, $post, $where);
+        if (preg_match(self::WHERE_REGEX_ARROWS, $post, $match)) {
+            return $this->whereArrow($match[0]);
+        } else if (preg_match(self::WHERE_REGEX_FROM_TO, $post, $where)) {
+            return $where;
+        }
 
+        return $where;
+    }
+    
+    private function whereArrow($match)
+    {
+        $where = [];
+        $cities = array_map('trim', preg_split('/' . self::WHERE_ARROWS . '/', $match));
+
+        $where['from'] = array_shift($cities);
+        $where['to'] = array_pop($cities);
+        if ($cities) {
+            $where['through'] = $cities;
+        }
+        
         return $where;
     }
 

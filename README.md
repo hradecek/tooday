@@ -1,0 +1,6 @@
+# Tooday
+
+Run testing:
+```
+$ phpunit
+```

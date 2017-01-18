@@ -2,11 +2,11 @@
 
 namespace Tooday\Parser;
 
-use Exception;
+use Tooday\Exceptions\ParserException;
 
 /**
  * Implementation for Slovak ride-parser.
- * 
+ *
  * @package Tooday\Parser
  * @author Ivo Hradek <ivohradek@gmail.com>
  */
@@ -18,7 +18,7 @@ class RideParserImpl implements RideParser
      * Parsing all kinds of 'arrow' style:
      *   Ex. ... City1 ~> City2 ...
      *       ... City1 - City2 ...
-     * 
+     *
      * Note: In WHERE_ARROWS if one arrow is sub-arrow of another
      *       it must be listed before to match first.
      *       (ex. -->|-> or >>>|>>|>)
@@ -36,7 +36,7 @@ class RideParserImpl implements RideParser
     public function where($post)
     {
         $match = [];
-        
+
         if (preg_match(self::WHERE_REGEX_ARROWS, $post, $match)) {
             return $this->whereArrow($match[0]);
         } else if (preg_match(self::WHERE_REGEX_FROM_TO, $post, $where)) {
@@ -45,7 +45,7 @@ class RideParserImpl implements RideParser
 
         return $where;
     }
-    
+
     private function whereArrow($match)
     {
         $where = [];
@@ -56,7 +56,7 @@ class RideParserImpl implements RideParser
         if ($cities) {
             $where['through'] = $cities;
         }
-        
+
         return $where;
     }
 
@@ -75,6 +75,8 @@ class RideParserImpl implements RideParser
      * List of week's days with their appropriate declension.
      */
     const DAYS = [
+        'nedela'   => 0,
+        'nedeľa'   => 0,
         'pondelok' => 1,
         'utorok'   => 2,
         'stredu'   => 3,
@@ -85,53 +87,49 @@ class RideParserImpl implements RideParser
         'sobotu'   => 6,
         'sobota'   => 6,
         'nedelu'   => 7,
-        'nedela'   => 7,
-        'nedeľa'   => 7,
     ];
 
     public function when($string)
     {
         $when = array();
-        
+        $fromDay = "";
+        $fromAdverb = "";
+
+        $day = $this->containsOneOf($string, array_keys(self::DAYS));
         $adverb = $this->containsOneOf($string, self::ADVERBS);
-        $day = $this->containsOneOf($string, self::DAYS);
         if ($adverb) {
-            $when['date'] = $this->getDateFromAdverb($adverb);
-        } else if ($day) {
-            $when['date'] = $day;
+            $fromAdverb = $this->getDateFromAdverb($adverb);
         }
+        if ($day) {
+            $fromDay = $this->getDateFromDay($day);
+        }
+
+        if ($fromAdverb && $fromDay && $fromAdverb !== $fromDay) {
+            throw new ParserException('Dates are not consistent');
+        }
+
+        $when['date'] = $fromAdverb ?: $fromDay;
+
         return $when;
-    }
-    
-    private function getCurrentDayInWeek()
-    {
-        $date = date('Y-m-d');
-        $day = date('N', strtotime($date));
-        
-        return $day;
     }
 
     private function getDateFromAdverb($adverb)
     {
-        switch ($adverb) {
-            case 'dnes':
-                $add = 0;
-                break;
-            case 'zajtra':
-                $add = 1;
-                break;
-            case 'pozajtra':
-                $add = 2;
-                break;
-            case 'popozajtra':
-                $add = 2;
-                break;
-            default:
-                throw new Exception('there is not such an adverb');
-        }
-        $current = date('Y-m-d');
+        $add = array_search($adverb, self::ADVERBS);
 
-        return date('Y-m-d', strtotime($Date . " + $add days"));
+        return date('Y-m-d', strtotime("+ $add days"));
+    }
+
+    private function getDateFromDay($day)
+    {
+        $currentDayNumber = date('w');
+        $dayNumber = self::DAYS[$day];
+        $add = $dayNumber - $currentDayNumber;
+        if ($add < 0) {
+            return null;
+        }
+
+        return date('Y-m-d', strtotime("+ $add days"));
     }
 
     // *** 'Price' parsing
@@ -169,12 +167,12 @@ class RideParserImpl implements RideParser
         'hľadam', 'hľadame',
         'hľadám', 'hľadáme',
     ];
-    
+
     public function isRequest($string)
     {
         return $this->containsOneOf($string, self::REQUESTS);
     }
-    
+
     // *** Helper functions
     private function containsOneOf($string, array $words)
     {
@@ -184,7 +182,8 @@ class RideParserImpl implements RideParser
         if (count($intersect) != 1) {
             return null;
         }
-        
+
         return array_pop($intersect);
     }
 }
+

@@ -11,6 +11,15 @@ use Tooday\Parser\RideParserImpl;
 class RideParserTestCase extends TestCase
 {
     /**
+     * Name of 'where' group test cases
+     */
+    const GROUP_WHERE = 'where';
+    /**
+     * Name of 'when' group test cases
+     */
+    const GROUP_WHEN = 'when';
+    
+    /**
      * Default sample cities used in test data.
      */
     const TEST_CITIES = [
@@ -18,12 +27,21 @@ class RideParserTestCase extends TestCase
         'through' => ['CityThroughOne', 'CityThroughTwo'],
         'to'      => 'CityTo'
     ];
+
+    /**
+     * Default 'when' sample used in test data.
+     */
+    const TEST_SAMPLE_WHEN = [
+        'date' => '2017-01-12',
+        'time' => '9:00'
+    ];
     
     /**
      * Path to dummy data file
      */
     const TEST_DATA = [
-        'where' => 'tests/resources/whereTestCaseData.test'
+        self::GROUP_WHERE => 'tests/resources/whereTestCaseData.test',
+        self::GROUP_WHEN  => 'tests/resources/whenTestCaseData.test'
     ];
     
     /**
@@ -34,19 +52,31 @@ class RideParserTestCase extends TestCase
     /**
      * @var array testing data
      */
-    private static $posts;
+    private $posts;
 
     /**
-     * Set up test class
+     * Set up test
+     * 
+     * @before
      */
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        self::$posts = self::readDummyDataFile(self::TEST_DATA['where']);
+        parent::setUp();
+        $this->parser = new RideParserImpl;
+        
+        $groups = $this->getGroups();
+        if (array_search(self::GROUP_WHERE, $groups)) {
+            $path = self::TEST_DATA[self::GROUP_WHERE];
+            $this->posts = $this->readDummyDataFile($path);
+        } else if (array_search(self::GROUP_WHEN, $groups)) {
+            $path = self::TEST_DATA[self::GROUP_WHEN];
+            $this->posts = $this->readDummyDataFile($path);
+        }
     }
     
     // Read test data file
     // See tests/resources folder for format example
-    private static function readDummyDataFile($filePath)
+    private function readDummyDataFile($filePath)
     {
         $fileHandle = fopen($filePath, 'r');
         if (!$fileHandle) {
@@ -73,45 +103,50 @@ class RideParserTestCase extends TestCase
         fclose($fileHandle);
         return $data;
     }
-    
-    /**
-     * Set up test
-     */
-    public function setUp()
-    {
-        parent::setUp();
-        $this->parser = new RideParserImpl;
-    }
 
     /**
      * @group where
      */
-    public function testWhereDefinedWithArrow()
+    public function testWhereBasicFuncionality()
     {
-        foreach (self::$posts as $post) {
+        foreach ($this->posts as $post) {
             $where = $this->parser->where($post);
             $this->assertWhere(self::TEST_CITIES, $where, $post);
         }
-    }
-    
-    public function testWhenBasic()
-    {
-        $this->assertTrue(true);
     }
 
     private function assertWhere($expected, $actual, $post)
     {
         $this->assertArrayHasKey('from', $actual, "<from> should be parsed for:\n$post");
         $this->assertArrayHasKey('to', $actual, "<to> should be parsed for:\n$post");
-        // $this->assertArrayHasKey('through', $actual, "<through> should be parsed for:\n$post");
         
         $this->assertEquals($expected['from'], $actual['from'], "<from> should be same for:\n$post");
         $this->assertEquals($expected['to'], $actual['to'], "<to> should be same for:\n$post");
         
-        //if (!empty($actual['through'])) {
         if (array_key_exists('through', $actual)) {
             $this->assertEquals($expected['through'][0], $actual['through'][0], "<through> should be same for:\n$post");
             $this->assertEquals($expected['through'][1], $actual['through'][1], "<through> should be same for:\n$post");
+        }
+    }
+    
+    /**
+     * @group when
+     */
+    public function testWhereBasicFunctionality()
+    {
+        foreach ($this->posts as $post) {
+            $when = $this->parser->when($post);
+            $this->assertWhen(self::TEST_SAMPLE_WHEN, $when, $post);
+        }
+    }
+    
+    private function assertWhen($expected, $actual, $post)
+    {
+        if (array_key_exists('time', $actual)) {
+            $this->assertEquals($expected['time'], $actual['time'], "<time> should be same for: $post");
+        }
+        if (array_key_exists('date', $actual)) {
+            $this->assertEquals($expected['date'], $actual['date'], "<date> should be same for: $post");
         }
     }
 }

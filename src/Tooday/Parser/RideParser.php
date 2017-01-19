@@ -3,64 +3,77 @@
 namespace Tooday\Parser;
 
 /**
- * <p>
- * Simple parser for a so called "ride post"
- * </p>
- * 
+ * <p>This is facade for Slovak ride-parser.</p>
+ *
  * @package Tooday\Parser
  * @author Ivo Hradek <ivohradek@gmail.com>
  */
-interface RideParser
+class RideParser implements RideParserFacade
 {
     /**
-     * <p>
-     * Get offered <b>price</b>
-     * If such an information is not available return null.
-     * </p>
-     * 
-     * @param string $post
-     * @return double|null
+     * @var WhereParser - parsing places (from, to, ...)
      */
-    public function price($post);
+    private $whereParser;
 
     /**
-     * <p>Get <b>time</b> info about the ride.</p>
-     *
-     * <p>
-     * Returned array format:
-     *   array['date'] - date in the format dd/mm/YYYY
-     *   array['time'] - time in the format HH:MM
-     * </p>
-     *
-     * @param string $post
-     * @return array
+     * @var WhenParser - parsing times and dates
      */
-    public function when($post);
+    private $whenParser;
+    
+    public function __construct()
+    {
+        $this->whenParser = new WhenParser;
+        $this->whereParser = new WhereParser;
+    }
+    
+    public function where($post)
+    {
+        return $this->whereParser->parse($post);
+    }
+    
+    public function when($post)
+    {
+        return $this->whenParser->parse($post);
+    }
+    
+    // *** 'Price' parsing
+    public function price($string)
+    { }
 
+    // *** 'is-offer' filtering
     /**
-     * <p>Get <b>place</b> info about the ride.</p>
-     * 
-     * <p>
-     * Returned array format:
-     *   array['from'] - place 'from' ride is offered; start point
-     *   array['to'] - place 'to' ride is offered; end point
-     *   array['through'] - array (optional); in case ride offering 'through' points
-     * </p>
-     * 
-     * @param string $post
-     * @return array
+     * List of 'offering' words.
      */
-    public function where($post);
+    const OFFERS = [
+        'ponukam', 'ponukame',
+        'ponúkam', 'ponúkame',
+    ];
 
+    public function isOffer($string)
+    {
+        // return $this->containsOneOf($string, self::OFFERS);
+    }
+
+    // *** 'free-seats' parsing
+    public function freeSeats($post)
+    {
+        // TODO: Implement freeSeats() method.
+    }
+
+    // *** 'is-request' filtering
     /**
-     * <p>
-     * Get information about <b>free seats</b> which are offered.
-     * If there are no such information null is returned.
-     * </p>
-     * 
-     * @param string $post
-     * @return integer|null - number of free seats if available, otherwise null
+     * List of 'requests' words.
      */
-    public function freeSeats($post);
+    const REQUESTS = [
+        'hladam', 'hladame',
+        'hladam', 'hladame',
+        'hľadam', 'hľadame',
+        'hľadám', 'hľadáme',
+    ];
+
+    public function isRequest($string)
+    {
+        // return $this->containsOneOf($string, self::REQUESTS);
+    }
 }
 

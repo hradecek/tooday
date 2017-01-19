@@ -1,12 +1,16 @@
 <?php
 
 // Note: This simple utility is for testing purposes only!
+require_once 'Tooday/Utils.php';
+require_once 'Tooday/Parser/Parser.php';
+require_once 'Tooday/Parser/WhenParser.php';
+require_once 'Tooday/Parser/WhereParser.php';
+require_once 'Tooday/Parser/RideParserFacade.php';
 require_once 'Tooday/Parser/RideParser.php';
-require_once 'Tooday/Parser/RideParserImpl.php';
 require_once 'Tooday/Exceptions/ParserException.php';
 
 $handle = fopen('php://stdin', 'r');
-$parser = new Tooday\Parser\RideParserImpl;
+$parser = new Tooday\Parser\RideParser;
 
 echo 'Test case: ';
 while ($test = trim(fgets($handle))) {
